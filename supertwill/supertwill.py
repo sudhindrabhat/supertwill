@@ -24,6 +24,7 @@
 # as a listener is below.
 
 #by default we assume env variables are set for credentials: TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN
+#TWILIO_FROM_NUMBER and TWILIO_TO_NUMBER and TWILIO_TO_NUMBERS
 
 # https://www.twilio.com/docs/api/voice/making-calls
 
@@ -70,6 +71,7 @@ class SuperTwill(ProcessStateMonitor):
         parser.add_option("-t", "--token", help="Twilio Token")
         parser.add_option("-m", "--mode", help="call/sms/both")
         parser.add_option("-n", "--hostname", help="System Hostname")
+        parser.add_option("-c", "--callmultiple", help="if set uses TWILIO_TO_NUMBERS")
 
         return parser
 
@@ -122,10 +124,10 @@ class SuperTwill(ProcessStateMonitor):
         return txt
 
     def send_batch_notification(self):
-        TWILIO_ACCOUNT_SID = ''
-        TWILIO_AUTH_TOKEN = ''
-        self.to_no = ''
-        self.from_no = ''
+        TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
+        TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+        self.to_no = os.environ.get('TWILIO_TO_NUMBER')
+        self.from_no = os.environ.get('TWILIO_FROM_NUMBER')
         self.twilio_client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
         i = 0
         for msg in self.batchmsgs:
