@@ -28,22 +28,6 @@
 
 # https://www.twilio.com/docs/api/voice/making-calls
 
-# the url for twiml can be provided, so that it can be hosted by a simple webserver. This provides more control
-# to handle USER INPUT VIA KEYPAD (DTMF TONES), plus the webserver can also have hooks for status_callback
-
-# the url can have query params using which the webserver can determine what to say in the call
-
-#if url is not specified, by default we use twimlets, where you don't have to host your own webserver.
-
-#the caller has to specify the xml file name and we try to read it from PATH. also a config file with same name:
-#the config file has parameters like from no, to no, etc
-
-#we attach the xml to twimlets to place the call
-
-#if the files are not found we use a default xml to place the call.
-
-
-
 
 import copy
 import os
@@ -70,8 +54,7 @@ class SuperTwill(ProcessStateMonitor):
         parser = OptionParser()
         parser.add_option("-t", "--token", help="Twilio Token")
         parser.add_option("-m", "--mode", help="call/sms/both")
-        parser.add_option("-n", "--hostname", help="System Hostname")
-        parser.add_option("-c", "--callmultiple", help="if set uses TWILIO_TO_NUMBERS")
+        #parser.add_option("-c", "--callmultiple", help="if set uses TWILIO_TO_NUMBERS")
 
         return parser
 
@@ -137,15 +120,12 @@ class SuperTwill(ProcessStateMonitor):
                 self._alert_message_for_poloniex_new_coin(msg)
             i += 1
 
-
     def _alert_message_for_poloniex_new_coin(self, msg):
-        #sentence_to_say = 'Alert msg'
         message = self.twilio_client.messages.create(to=self.to_no,
                            from_=self.from_no ,
                            body=msg)
 
     def _alert_call_for_poloniex_new_coin(self, msg):
-        #sentence_to_say = 'Alert msg'
         f = {'Message': msg}
         x = urllib.urlencode(f)
         url = DEFAULT_CALL_URL % x
